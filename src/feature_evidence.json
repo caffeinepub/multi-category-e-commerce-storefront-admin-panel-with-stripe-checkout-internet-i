@@ -1,0 +1,349 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-the-storefront-information-architecture-and-routing-for-a-multi-category-e-commerce-site-with-home-category-listing-product-detail-cart-checkout-wishlist-orders-order-tracking-account-login-and-support-pages",
+      "featureTitle": "Create the storefront information architecture and routing for a multi-category e-commerce site with: Home, Category listing, Product detail, Cart, Checkout, Wishlist, Orders (order tracking), Account/Login, and Support pages.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/components/layout/HeaderNav.tsx",
+        "frontend/src/components/layout/SiteLayout.tsx",
+        "frontend/src/pages/AccountPage.tsx",
+        "frontend/src/pages/CartPage.tsx",
+        "frontend/src/pages/CategoryListingPage.tsx",
+        "frontend/src/pages/CheckoutPage.tsx",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/OrdersPage.tsx",
+        "frontend/src/pages/ProductDetailPage.tsx",
+        "frontend/src/pages/SupportPage.tsx",
+        "frontend/src/pages/WishlistPage.tsx",
+        "frontend/src/pages/admin/AdminDashboardPage.tsx",
+        "frontend/src/pages/admin/AdminLayout.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-coherent-premium-visual-theme-colors-typography-spacing-components-across-the-entire-ui-aligned-with-a-modern-stylish-marketplace-aesthetic-while-remaining-fast-and-mobile-friendly-do-not-use-a-blue-purple-default-theme",
+      "featureTitle": "Implement a coherent premium visual theme (colors, typography, spacing, components) across the entire UI, aligned with a modern stylish marketplace aesthetic, while remaining fast and mobile-friendly. Do not use a blue+purple default theme.",
+      "files": [
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-home-page-with-promotional-hero-banners-offer-sections-and-featured-categories-at-least-the-6-top-level-categories-provided-with-fast-loading-responsive-layout",
+      "featureTitle": "Build the Home page with promotional hero banners, offer sections, and featured categories (at least the 6 top-level categories provided), with fast-loading responsive layout.",
+      "files": [
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-category-wise-product-listing-pages-including-navigation-across-top-level-categories-and-subcategories-and-basic-client-side-filters-sorting-e-g-price-sort-in-stock-variant-availability-where-applicable",
+      "featureTitle": "Implement category-wise product listing pages, including navigation across top-level categories and subcategories, and basic client-side filters/sorting (e.g., price sort, in-stock, variant availability where applicable).",
+      "files": [
+        "frontend/src/components/catalog/ProductCard.tsx",
+        "frontend/src/pages/CategoryListingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-product-detail-pages-with-image-gallery-price-description-selectable-size-color-variants-when-available-review-list-review-submission-authenticated-and-add-to-cart-add-to-wishlist-actions",
+      "featureTitle": "Implement product detail pages with: image gallery, price, description, selectable size/color variants (when available), review list + review submission (authenticated), and add-to-cart/add-to-wishlist actions.",
+      "files": [
+        "frontend/src/components/product/ReviewSection.tsx",
+        "frontend/src/components/product/VariantSelector.tsx",
+        "frontend/src/pages/ProductDetailPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-cart-functionality-add-update-remove-items-quantity-changes-variant-display-price-totals-and-persistence-per-user-principal-with-a-guest-fallback-stored-locally-until-login",
+      "featureTitle": "Implement cart functionality: add/update/remove items, quantity changes, variant display, price totals, and persistence per user (principal) with a guest fallback stored locally until login.",
+      "files": [
+        "frontend/src/pages/CartPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-checkout-flow-with-shipping-contact-form-order-summary-and-payment-method-selection-where-stripe-is-the-only-real-online-payment-upi-net-banking-cod-are-represented-as-offline-manual-payment-options-handled-by-admin",
+      "featureTitle": "Implement checkout flow with shipping/contact form, order summary, and payment method selection where: Stripe is the only real online payment; UPI/net banking/COD are represented as offline/manual payment options handled by admin.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/useStripeCheckout.ts",
+        "frontend/src/pages/CheckoutPage.tsx",
+        "frontend/src/pages/PaymentFailurePage.tsx",
+        "frontend/src/pages/PaymentSuccessPage.tsx",
+        "frontend/src/pages/admin/StripeSetupPanel.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-internet-identity-authentication-for-customers-and-admins-expose-account-pages-showing-basic-profile-principal-and-user-specific-sections-orders-wishlist-admin-access-must-require-an-admin-role",
+      "featureTitle": "Add Internet Identity authentication for customers and admins; expose account pages showing basic profile (principal) and user-specific sections (orders, wishlist). Admin access must require an admin role.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/AdminRouteGuard.tsx",
+        "frontend/src/components/auth/LoginButton.tsx",
+        "frontend/src/components/auth/ProfileSetupDialog.tsx",
+        "frontend/src/pages/AccountPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-simple-status-based-order-tracking-placed-packed-shipped-delivered-and-optionally-cancelled-visible-to-customers-and-manageable-by-admins",
+      "featureTitle": "Implement simple status-based order tracking: Placed → Packed → Shipped → Delivered (and optionally Cancelled), visible to customers and manageable by admins.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/OrdersPage.tsx",
+        "frontend/src/pages/admin/AdminOrdersPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-wishlist-feature-allowing-authenticated-users-to-add-remove-products-and-view-their-wishlist-provide-clear-ui-affordances-from-listing-and-product-detail-pages",
+      "featureTitle": "Implement a wishlist feature allowing authenticated users to add/remove products and view their wishlist; provide clear UI affordances from listing and product detail pages.",
+      "files": [
+        "frontend/src/components/catalog/ProductCard.tsx",
+        "frontend/src/pages/ProductDetailPage.tsx",
+        "frontend/src/pages/WishlistPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-an-admin-panel-ui-and-backend-endpoints-to-manage-categories-and-subcategories-products-including-images-variants-inventory-pricing-orders-status-updates-manual-payment-marking-and-users-admin-role-assignment",
+      "featureTitle": "Create an admin panel UI and backend endpoints to manage: categories (and subcategories), products (including images, variants, inventory/pricing), orders (status updates, manual payment marking), and users/admin role assignment.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/admin/AdminCategoriesPage.tsx",
+        "frontend/src/pages/admin/AdminLayout.tsx",
+        "frontend/src/pages/admin/AdminProductsPage.tsx",
+        "frontend/src/pages/admin/AdminSupportInboxPage.tsx",
+        "frontend/src/pages/admin/AdminUsersPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-customer-support-entry-points-a-contact-form-stored-submitted-to-backend-for-admin-review-and-a-whatsapp-link-button-configurable-phone-number-shown-in-support-page-and-or-site-footer",
+      "featureTitle": "Add customer support entry points: a contact form (stored/submitted to backend for admin review) and a WhatsApp link/button (configurable phone number) shown in Support page and/or site footer.",
+      "files": [
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/components/support/WhatsAppButton.tsx",
+        "frontend/src/config/support.ts",
+        "frontend/src/pages/SupportPage.tsx",
+        "frontend/src/pages/admin/AdminSupportInboxPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-baseline-seo-and-performance-best-practices-per-page-titles-meta-where-applicable-accessible-headings-optimized-images-and-fast-client-side-navigation-with-sensible-loading-states",
+      "featureTitle": "Implement baseline SEO and performance best practices: per-page titles/meta where applicable, accessible headings, optimized images, and fast client-side navigation with sensible loading states.",
+      "files": [
+        "frontend/src/hooks/usePageMeta.ts",
+        "frontend/src/pages/CartPage.tsx",
+        "frontend/src/pages/CategoryListingPage.tsx",
+        "frontend/src/pages/CheckoutPage.tsx",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/OrdersPage.tsx",
+        "frontend/src/pages/ProductDetailPage.tsx",
+        "frontend/src/pages/SupportPage.tsx",
+        "frontend/src/pages/WishlistPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-required-generated-static-images-to-support-a-premium-storefront-look-and-render-them-in-the-ui-from-frontend-public-assets-generated-do-not-serve-generated-images-through-the-backend",
+      "featureTitle": "Add required generated static images to support a premium storefront look and render them in the UI from frontend/public/assets/generated (do not serve generated images through the backend).",
+      "files": [
+        "frontend/src/components/branding/BrandMark.tsx",
+        "frontend/src/components/catalog/FeaturedCategories.tsx",
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

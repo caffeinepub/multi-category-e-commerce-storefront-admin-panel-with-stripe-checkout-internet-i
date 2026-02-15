@@ -1,0 +1,343 @@
+{
+  "kind": "build_request",
+  "title": "Multi-category e-commerce storefront + admin panel with Stripe checkout, Internet Identity login, wishlist, and order tracking",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create the storefront information architecture and routing for a multi-category e-commerce site with: Home, Category listing, Product detail, Cart, Checkout, Wishlist, Orders (order tracking), Account/Login, and Support pages.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create a modern, scalable e-commerce website to sell multiple types of products online.",
+          "The website should include:\n- Home page with banners, offers, and featured categories\n- Category-wise product listing\n- Product detail pages (images, price, description, reviews, size/color options)\n- Add to cart and checkout\n- User login & order tracking\n- Wishlist\n- Customer support (contact form + WhatsApp)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can navigate between all listed pages via a consistent header/footer navigation.",
+        "Routes are accessible and render non-empty page shells with appropriate titles and basic empty/loading states.",
+        "Mobile navigation is usable on small screens (e.g., collapsible menu)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement a coherent premium visual theme (colors, typography, spacing, components) across the entire UI, aligned with a modern stylish marketplace aesthetic, while remaining fast and mobile-friendly. Do not use a blue+purple default theme.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Design style:\nModern, stylish, premium, and easy to use (like Amazon, Meesho, or Myntra)",
+          "Extra requirements:\nMobile-friendly, fast loading, SEO optimized, secure payments, and scalable for future growth."
+        ]
+      },
+      "acceptanceCriteria": [
+        "All primary UI elements (buttons, inputs, cards, badges, headings) use a consistent design system.",
+        "Pages are responsive and readable on mobile and desktop.",
+        "No default blue+purple theme is used unless explicitly required (not required here)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Define the backend data model and APIs for: Categories (with subcategories), Products (with images, price, description, inventory, size/color variants), Reviews, Carts, Wishlists, Orders, Order items, Users (Internet Identity principals), and Admin role/permissions.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "The store will sell:\n\nCategory 1 – Clothing\n- Men’s wear\n- Women’s wear\n- Kids wear\n- Ethnic & western outfits\n\nCategory 2 – Beauty & Skincare\n- Natural skincare\n- Face packs\n- Creams, oils, and beauty products\n\nCategory 3 – Health & Wellness\n- Herbal powders (like Moringa)\n- Supplements\n- Wellness products\n\nCategory 4 – Perfumes & Fragrances\n- Body sprays\n- Perfumes\n- Attars\n\nCategory 5 – Jewellery & Accessories\n- Artificial jewellery\n- Fashion accessories\n- Traditional jewellery\n\nCategory 6 – Lifestyle Products\n- Bags\n- Wallets\n- Home & gift items",
+          "- Product detail pages (images, price, description, reviews, size/color options)",
+          "- Admin panel to manage products, categories, orders, and users"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes query/update methods needed to support browsing categories/products, product detail retrieval, review CRUD (as allowed), cart/wishlist operations, order creation, and order status updates.",
+        "All user-specific data is keyed by authenticated Internet Identity principal.",
+        "Admin-only operations are protected by role checks (not accessible to non-admin principals)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Build the Home page with promotional hero banners, offer sections, and featured categories (at least the 6 top-level categories provided), with fast-loading responsive layout.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Home page with banners, offers, and featured categories"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Home page renders at least: hero banner area, an offers strip/section, and a featured categories grid for the six categories.",
+        "Featured categories link to the relevant category listing page.",
+        "Images are optimized and do not block initial render (use appropriate sizing and lazy loading where sensible)."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement category-wise product listing pages, including navigation across top-level categories and subcategories, and basic client-side filters/sorting (e.g., price sort, in-stock, variant availability where applicable).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Category-wise product listing"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Selecting a category shows only products in that category (and optionally selected subcategory).",
+        "Sorting changes product order without breaking navigation.",
+        "Listing supports pagination or incremental loading to avoid rendering extremely large lists at once."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement product detail pages with: image gallery, price, description, selectable size/color variants (when available), review list + review submission (authenticated), and add-to-cart/add-to-wishlist actions.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Product detail pages (images, price, description, reviews, size/color options)",
+          "Wishlist"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Variant selection updates the selected SKU/variant state and add-to-cart uses the selected variant.",
+        "Authenticated users can submit a review; unauthenticated users are prompted to sign in.",
+        "Add to cart and add to wishlist persist and reflect in UI state after refresh."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Implement cart functionality: add/update/remove items, quantity changes, variant display, price totals, and persistence per user (principal) with a guest fallback stored locally until login.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Add to cart and checkout"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Cart shows line items with product name, chosen variant, unit price, quantity, and subtotal; shows total.",
+        "Cart persists across reloads for authenticated users; guest cart persists locally.",
+        "Cart actions update UI immediately and remain consistent with backend state after refetch."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Implement checkout flow with shipping/contact form, order summary, and payment method selection where: Stripe is the only real online payment; UPI/net banking/COD are represented as offline/manual payment options handled by admin.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4",
+          "msg-2"
+        ],
+        "quotes": [
+          "Use **only Stripe** for real payments, and simulate UPI/net‑banking/COD as manual/offline options.",
+          "Payment options (UPI, cards, net banking, COD)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Checkout provides payment method choices including Stripe and offline/manual options (UPI, net banking, COD) clearly labeled as manual/offline where applicable.",
+        "Stripe checkout completes with an order created/confirmed in backend upon successful payment.",
+        "Offline/manual selection creates an order in a 'Payment Pending/Manual Verification' equivalent state for admin handling."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Add Internet Identity authentication for customers and admins; expose account pages showing basic profile (principal) and user-specific sections (orders, wishlist). Admin access must require an admin role.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4",
+          "msg-2"
+        ],
+        "quotes": [
+          "Use **Internet Identity** for both customer and admin login.",
+          "User login & order tracking",
+          "Admin panel to manage products, categories, orders, and users"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Unauthenticated users can browse products but must sign in to place orders, view order history, or manage wishlist/reviews.",
+        "Admin routes are inaccessible (and backend methods unauthorized) for non-admin principals.",
+        "Account page shows logged-in state and provides logout."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Implement simple status-based order tracking: Placed → Packed → Shipped → Delivered (and optionally Cancelled), visible to customers and manageable by admins.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4",
+          "msg-2"
+        ],
+        "quotes": [
+          "Use **simple status‑based order tracking** without courier API integration.",
+          "User login & order tracking"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Customers can view their order list and each order’s current status and items.",
+        "Admins can update order status through the admin panel; customers see updates after refresh.",
+        "No courier API integration or shipment-ID-based tracking is required."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Implement a wishlist feature allowing authenticated users to add/remove products and view their wishlist; provide clear UI affordances from listing and product detail pages.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Wishlist"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Wishlist page lists saved products with quick remove and navigation to product details.",
+        "Wishlist state is persisted per authenticated user.",
+        "Wishlist toggle is available on product cards and product detail pages."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Create an admin panel UI and backend endpoints to manage: categories (and subcategories), products (including images, variants, inventory/pricing), orders (status updates, manual payment marking), and users/admin role assignment.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Admin panel to manage products, categories, orders, and users"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin can create/edit/delete categories and products from the UI and see changes reflected in the storefront.",
+        "Admin can view all orders, inspect order details, and update status.",
+        "Admin can mark manual/offline payments as verified/paid (as applicable) and proceed order status flow.",
+        "Admin can grant/revoke admin role to other principals (or manage an allowlist), with backend enforcement."
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Add customer support entry points: a contact form (stored/submitted to backend for admin review) and a WhatsApp link/button (configurable phone number) shown in Support page and/or site footer.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Customer support (contact form + WhatsApp)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Contact form includes at least name, email/phone, subject, message; submission is acknowledged with a success state.",
+        "Admin can view contact submissions in the admin panel.",
+        "WhatsApp button opens wa.me link with the configured phone number and an optional prefilled message."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Implement baseline SEO and performance best practices: per-page titles/meta where applicable, accessible headings, optimized images, and fast client-side navigation with sensible loading states.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Mobile-friendly, fast loading, SEO optimized"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each major page sets a meaningful document title (and meta description where implemented).",
+        "Images use appropriate formats/sizes and lazy loading for non-critical media.",
+        "All pages have loading/empty states for data fetching; no blocking spinner-only screens for extended periods."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Seed the application with initial data for the six top-level categories and a small set of example products across categories to demonstrate end-to-end browsing, cart, and checkout.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "The store will sell:\n\nCategory 1 – Clothing ...\nCategory 6 – Lifestyle Products ..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "On first run (fresh canister), the app has at least the 6 categories and at least a few products distributed across them.",
+        "Seed data is idempotent (does not duplicate on refresh/redeploy) or is created via an explicit admin-only action."
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Add required generated static images to support a premium storefront look and render them in the UI from frontend/public/assets/generated (do not serve generated images through the backend).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Home page with banners, offers, and featured categories",
+          "Design style:\nModern, stylish, premium, and easy to use (like Amazon, Meesho, or Myntra)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images are placed under frontend/public/assets/generated and referenced directly by the frontend.",
+        "Home page hero/banner section uses the generated banner images.",
+        "Category tiles use the generated category images/icons."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo); add backend/migration.mo only if state upgrades are required.",
+    "Frontend must not edit any immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui (compose these components instead).",
+    "Payments: implement Stripe for real online payments; represent UPI/net banking/COD only as simulated offline/manual options (no real UPI/net-banking integrations).",
+    "Authentication: use Internet Identity only (no third-party auth providers).",
+    "No external databases or third-party backend services; persist data in canister state.",
+    "No courier/shipping carrier API integration for tracking (status-based only)."
+  ],
+  "nonGoals": [
+    "Implementing real UPI or net banking payment rails or integrations beyond Stripe.",
+    "Integrating external courier APIs, shipment tracking IDs, or real-time tracking maps.",
+    "Real-time chat support or WhatsApp API integration (link/button only).",
+    "Multi-service/microservices backend architecture or external database setup."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Premium e-commerce wordmark logo, minimal, monochrome on transparent background (logo.dim_512x512.png)",
+      "Wide hero banner with premium fashion/beauty/wellness collage, neutral palette, no text (hero-banner.dim_1920x700.png)",
+      "Secondary promotional banner with abstract premium gradients in warm neutrals, no text (promo-banner.dim_1920x500.png)",
+      "Six category tile illustrations/icons in a consistent premium style: Clothing, Beauty & Skincare, Health & Wellness, Perfumes & Fragrances, Jewellery & Accessories, Lifestyle Products (cat-clothing.dim_512x512.png; cat-beauty.dim_512x512.png; cat-wellness.dim_512x512.png; cat-fragrance.dim_512x512.png; cat-jewellery.dim_512x512.png; cat-lifestyle.dim_512x512.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use English for all user-facing UI text."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

@@ -1,0 +1,582 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "E-commerce storefront + admin panel (frontend-only)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Create storefront routing + page shells with consistent header/footer navigation and mobile-friendly menu.",
+      "acceptanceCriteria": [
+        "Users can navigate between all listed pages via a consistent header/footer navigation.",
+        "Routes are accessible and render non-empty page shells with appropriate titles and basic empty/loading states.",
+        "Mobile navigation is usable on small screens (e.g., collapsible menu)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the application router and route layout wiring for: Home, Category listing, Product detail, Cart, Checkout, Wishlist, Orders, Account/Login, Support, Admin, plus /payment-success and /payment-failure for Stripe return handling."
+        },
+        {
+          "path": "frontend/src/components/layout/SiteLayout.tsx",
+          "operation": "create",
+          "description": "Create a shared layout composing header + footer and an outlet region so all storefront/admin pages share consistent navigation. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/HeaderNav.tsx",
+          "operation": "create",
+          "description": "Create responsive header with desktop links + mobile collapsible navigation, cart shortcut, wishlist shortcut, and account/login entry. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Footer.tsx",
+          "operation": "create",
+          "description": "Create footer with Support link, WhatsApp link placeholder (configurable number), and basic marketplace footer sections."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "create",
+          "description": "Create Home page shell with sections placeholder (hero, offers, featured categories) and data loading states."
+        },
+        {
+          "path": "frontend/src/pages/CategoryListingPage.tsx",
+          "operation": "create",
+          "description": "Create Category listing page shell that reads category/subcategory from route params/search and shows a product grid area with loading/empty states."
+        },
+        {
+          "path": "frontend/src/pages/ProductDetailPage.tsx",
+          "operation": "create",
+          "description": "Create Product detail page shell with gallery area, variant selector area, reviews section, and cart/wishlist action area with loading states."
+        },
+        {
+          "path": "frontend/src/pages/CartPage.tsx",
+          "operation": "create",
+          "description": "Create Cart page shell for line items, totals, and checkout CTA with empty state."
+        },
+        {
+          "path": "frontend/src/pages/CheckoutPage.tsx",
+          "operation": "create",
+          "description": "Create Checkout page shell with shipping/contact form, order summary, and payment method selection UI placeholders."
+        },
+        {
+          "path": "frontend/src/pages/WishlistPage.tsx",
+          "operation": "create",
+          "description": "Create Wishlist page shell listing saved products with remove action placeholders and empty state."
+        },
+        {
+          "path": "frontend/src/pages/OrdersPage.tsx",
+          "operation": "create",
+          "description": "Create Orders page shell for order list and order tracking detail view placeholders with loading/empty states."
+        },
+        {
+          "path": "frontend/src/pages/AccountPage.tsx",
+          "operation": "create",
+          "description": "Create Account/Login page shell that shows logged-in state, profile summary, and navigation to orders/wishlist/admin (when permitted)."
+        },
+        {
+          "path": "frontend/src/pages/SupportPage.tsx",
+          "operation": "create",
+          "description": "Create Support page shell containing contact form UI and WhatsApp link section."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminLayout.tsx",
+          "operation": "create",
+          "description": "Create Admin panel layout shell with left navigation for Products, Categories, Orders, Users/Roles, Support inbox, and Stripe setup sections."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "operation": "create",
+          "description": "Create initial admin dashboard landing page shell with shortcuts to management sections."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Implement a premium, coherent visual theme (non blue+purple) across the UI using a consistent component styling approach.",
+      "acceptanceCriteria": [
+        "All primary UI elements (buttons, inputs, cards, badges, headings) use a consistent design system.",
+        "Pages are responsive and readable on mobile and desktop.",
+        "No default blue+purple theme is used unless explicitly required (not required here)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Define global CSS variables for shadcn-style theming in a warm neutral premium palette (avoid default blue+purple), base typography, and consistent spacing defaults; ensure fast, mobile-friendly styles. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme extensions (if needed) to support the premium palette and typography scale used throughout the storefront and admin UI."
+        },
+        {
+          "path": "frontend/src/components/ui/AppShellPrimitives.tsx",
+          "operation": "create",
+          "description": "Create small wrapper components (e.g., PageContainer, SectionTitle, LoadingSkeleton, EmptyState) that compose shadcn/ui primitives without modifying frontend/src/components/ui directly. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Build Home page with hero banners, offers, and featured categories for the six top-level categories.",
+      "acceptanceCriteria": [
+        "Home page renders at least: hero banner area, an offers strip/section, and a featured categories grid for the six categories.",
+        "Featured categories link to the relevant category listing page.",
+        "Images are optimized and do not block initial render (use appropriate sizing and lazy loading where sensible)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Implement hero using generated banner image, offers/promo section, and a featured categories grid for the 6 provided categories; wire category tiles to category listing routes and use responsive, fast-loading layout."
+        },
+        {
+          "path": "frontend/src/hooks/useCatalog.ts",
+          "operation": "create",
+          "description": "Create React Query hooks to fetch categories and products needed by Home (e.g., featured categories) via useActor(), with loading/empty states and safe caching."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Implement category-wise product listing with category/subcategory navigation plus basic client-side filters/sorting and pagination/incremental loading.",
+      "acceptanceCriteria": [
+        "Selecting a category shows only products in that category (and optionally selected subcategory).",
+        "Sorting changes product order without breaking navigation.",
+        "Listing supports pagination or incremental loading to avoid rendering extremely large lists at once."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/CategoryListingPage.tsx",
+          "operation": "modify",
+          "description": "Implement category + optional subcategory navigation UI, product grid rendering from backend category query, and client-side sorting/filter controls (price sort, in-stock/variant availability where possible) with incremental loading/pagination."
+        },
+        {
+          "path": "frontend/src/components/catalog/ProductCard.tsx",
+          "operation": "create",
+          "description": "Create reusable product card for listings with image slot, name, price, wishlist toggle affordance placeholder, and navigation to product detail. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/catalog/CategoryNav.tsx",
+          "operation": "create",
+          "description": "Create top-level category + subcategory navigation component used on listing pages and optionally header. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useProductListingState.ts",
+          "operation": "create",
+          "description": "Create a hook to manage local listing state (sort, filters, pagination/incremental loading) while keeping route params/search in sync."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Implement product detail UI with gallery, variants, reviews + authenticated review submission, and add-to-cart/add-to-wishlist actions.",
+      "acceptanceCriteria": [
+        "Variant selection updates the selected SKU/variant state and add-to-cart uses the selected variant.",
+        "Authenticated users can submit a review; unauthenticated users are prompted to sign in.",
+        "Add to cart and add to wishlist persist and reflect in UI state after refresh."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ProductDetailPage.tsx",
+          "operation": "modify",
+          "description": "Implement product detail rendering using product + variant queries, variant selector, image gallery UI, review list and review submission (gated by Internet Identity), and add-to-cart action wired to cart hook; include wishlist toggle affordance (persisting once backend capability exists)."
+        },
+        {
+          "path": "frontend/src/hooks/useProductDetail.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for fetching product, variants, and reviews, plus mutation for submitting reviews with authorization error handling."
+        },
+        {
+          "path": "frontend/src/components/product/VariantSelector.tsx",
+          "operation": "create",
+          "description": "Create a size/color variant selector component that updates selected variant state and communicates selected variantId upward. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/product/ReviewSection.tsx",
+          "operation": "create",
+          "description": "Create reviews list + submission form component; gate submission when unauthenticated with a sign-in prompt. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Implement cart with add/update/remove, totals, variant display, and persistence (backend per user + local guest fallback).",
+      "acceptanceCriteria": [
+        "Cart shows line items with product name, chosen variant, unit price, quantity, and subtotal; shows total.",
+        "Cart persists across reloads for authenticated users; guest cart persists locally.",
+        "Cart actions update UI immediately and remain consistent with backend state after refetch."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useCart.ts",
+          "operation": "create",
+          "description": "Implement cart state management: when authenticated, use backend cart capabilities via useActor() + React Query; when guest, persist to localStorage and merge/refresh on login; expose add/update/remove and computed totals."
+        },
+        {
+          "path": "frontend/src/pages/CartPage.tsx",
+          "operation": "modify",
+          "description": "Render cart line items with variant display, quantity controls, remove actions, totals, and proceed-to-checkout CTA; show empty/loading states and keep UI responsive on mobile."
+        },
+        {
+          "path": "frontend/src/components/cart/CartLineItem.tsx",
+          "operation": "create",
+          "description": "Create reusable cart line-item component with quantity stepper, remove button, variant info, and pricing display. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Implement checkout UI with shipping/contact form, order summary, payment selection, and Stripe redirect flow plus offline/manual options representation.",
+      "acceptanceCriteria": [
+        "Checkout provides payment method choices including Stripe and offline/manual options (UPI, net banking, COD) clearly labeled as manual/offline where applicable.",
+        "Stripe checkout completes with an order created/confirmed in backend upon successful payment.",
+        "Offline/manual selection creates an order in a 'Payment Pending/Manual Verification' equivalent state for admin handling."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useStripeCheckout.ts",
+          "operation": "create",
+          "description": "Implement Stripe checkout session creation using backend createCheckoutSession(), parse JSON to extract url, and redirect via window.location.href; include robust missing-url error handling. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CheckoutPage.tsx",
+          "operation": "modify",
+          "description": "Implement checkout form UI (shipping/contact), order summary from cart hook, payment method selection with Stripe vs offline/manual (UPI/net banking/COD clearly labeled), and trigger Stripe redirect for Stripe method; offline/manual flow remains UI-only until backend order capability is available."
+        },
+        {
+          "path": "frontend/src/pages/PaymentSuccessPage.tsx",
+          "operation": "create",
+          "description": "Implement Stripe payment success handler page that reads session identifier from URL, calls backend getStripeSessionStatus() and renders success/error state; then triggers any available backend finalization capability."
+        },
+        {
+          "path": "frontend/src/pages/PaymentFailurePage.tsx",
+          "operation": "create",
+          "description": "Implement Stripe payment failure handler page that renders a clear failure state and provides a link back to cart/checkout."
+        },
+        {
+          "path": "frontend/src/pages/admin/StripeSetupPanel.tsx",
+          "operation": "create",
+          "description": "Implement admin-only Stripe configuration UI using isStripeConfigured() and setStripeConfiguration(); show this panel only when not configured. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire /payment-success and /payment-failure routes to their respective pages and ensure navigation does not use router for Stripe-hosted url redirects."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Add Internet Identity-based auth UI with account page sections and admin gating based on role checks.",
+      "acceptanceCriteria": [
+        "Unauthenticated users can browse products but must sign in to place orders, view order history, or manage wishlist/reviews.",
+        "Admin routes are inaccessible (and backend methods unauthorized) for non-admin principals.",
+        "Account page shows logged-in state and provides logout."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Create login/logout button using the immutable useInternetIdentity hook, clearing React Query cache on logout; use throughout header and account page. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useAuthz.ts",
+          "operation": "create",
+          "description": "Create hooks for fetching caller role (getCallerUserRole/isCallerAdmin) and caller profile (getCallerUserProfile/saveCallerUserProfile) with React Query; handle authorization failures gracefully. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/ProfileSetupDialog.tsx",
+          "operation": "create",
+          "description": "Implement first-login profile setup dialog (name at minimum) based on getCallerUserProfile() returning null; avoid modal flash by respecting actor readiness and fetched state per authorization component guidance. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/AdminRouteGuard.tsx",
+          "operation": "create",
+          "description": "Create an admin-only route guard wrapper that checks isCallerAdmin() and shows an access denied view for non-admins; do not block public browsing routes."
+        },
+        {
+          "path": "frontend/src/pages/AccountPage.tsx",
+          "operation": "modify",
+          "description": "Render authenticated state (profile name) and logout, show user sections links (orders, wishlist) when authenticated, and show Admin link only when isCallerAdmin() is true."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Apply AdminRouteGuard to admin routes and gate wishlist/orders/review submission navigation/CTAs behind authentication while leaving catalog browsing public."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Add status-based order tracking UI for customers and admin order status management UI shells (frontend-only wiring).",
+      "acceptanceCriteria": [
+        "Customers can view their order list and each order’s current status and items.",
+        "Admins can update order status through the admin panel; customers see updates after refresh.",
+        "No courier API integration or shipment-ID-based tracking is required."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/OrdersPage.tsx",
+          "operation": "modify",
+          "description": "Implement customer-facing order list and detail UI shells for statuses (Placed → Packed → Shipped → Delivered, optional Cancelled) with loading/empty states; wire to backend once order capabilities are available."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminOrdersPage.tsx",
+          "operation": "create",
+          "description": "Create admin orders management page shell showing list/detail and status update controls; wire to backend once order management capabilities are available."
+        },
+        {
+          "path": "frontend/src/components/orders/OrderStatusBadge.tsx",
+          "operation": "create",
+          "description": "Create a consistent visual badge/stepper for order status display used by both customer and admin views. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire routes for customer orders and admin orders management into the router and admin navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Implement wishlist UI with authenticated gating and affordances from listing and product detail pages (frontend-only wiring).",
+      "acceptanceCriteria": [
+        "Wishlist page lists saved products with quick remove and navigation to product details.",
+        "Wishlist state is persisted per authenticated user.",
+        "Wishlist toggle is available on product cards and product detail pages."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useWishlist.ts",
+          "operation": "create",
+          "description": "Implement wishlist state manager with authenticated gating and persistence strategy: use backend when capability is available; meanwhile provide local placeholder state for UI development and ensure unauthenticated users are prompted to sign in."
+        },
+        {
+          "path": "frontend/src/pages/WishlistPage.tsx",
+          "operation": "modify",
+          "description": "Render wishlist items with quick remove and navigation to product detail; show empty state and require login to view."
+        },
+        {
+          "path": "frontend/src/components/catalog/ProductCard.tsx",
+          "operation": "modify",
+          "description": "Add wishlist toggle affordance on product cards; if unauthenticated, prompt user to sign in instead of toggling."
+        },
+        {
+          "path": "frontend/src/pages/ProductDetailPage.tsx",
+          "operation": "modify",
+          "description": "Add wishlist toggle affordance on product detail page; ensure UI reflects saved state."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Create admin panel UI for managing catalog, orders, users/roles, and Stripe setup with admin-only gating (frontend-only wiring).",
+      "acceptanceCriteria": [
+        "Admin can create/edit/delete categories and products from the UI and see changes reflected in the storefront.",
+        "Admin can view all orders, inspect order details, and update status.",
+        "Admin can mark manual/offline payments as verified/paid (as applicable) and proceed order status flow.",
+        "Admin can grant/revoke admin role to other principals (or manage an allowlist), with backend enforcement."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/admin/AdminProductsPage.tsx",
+          "operation": "create",
+          "description": "Implement admin products management UI using available backend capabilities (getAllProducts, addProduct); include edit/delete UI shells that remain disabled until backend capabilities exist; ensure admin-only guard is applied. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminCategoriesPage.tsx",
+          "operation": "create",
+          "description": "Create admin categories management UI shell (create/edit/delete) and wire to backend once category management capabilities are available; keep admin-only guard. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminUsersPage.tsx",
+          "operation": "create",
+          "description": "Implement admin user/role assignment UI using assignCallerUserRole(); include principal input and role selection; admin-only guarded. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminSupportInboxPage.tsx",
+          "operation": "create",
+          "description": "Create admin support inbox page shell for viewing contact submissions; wire to backend once submission listing capability is available."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminLayout.tsx",
+          "operation": "modify",
+          "description": "Wire admin navigation entries to Products/Categories/Orders/Users/Support/Stripe sections and show Stripe setup prompt when not configured. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register admin routes and ensure they are wrapped with AdminRouteGuard so non-admin principals cannot access them."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Add Support page contact form UI and WhatsApp link/button (configurable number) and wire admin review UI shell.",
+      "acceptanceCriteria": [
+        "Contact form includes at least name, email/phone, subject, message; submission is acknowledged with a success state.",
+        "Admin can view contact submissions in the admin panel.",
+        "WhatsApp button opens wa.me link with the configured phone number and an optional prefilled message."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/SupportPage.tsx",
+          "operation": "modify",
+          "description": "Implement support contact form UI (name, email/phone, subject, message) with client-side validation and a success acknowledgement state; wire submission to backend once capability exists."
+        },
+        {
+          "path": "frontend/src/config/support.ts",
+          "operation": "create",
+          "description": "Add frontend configuration for WhatsApp phone number and optional prefilled message used by Support page and footer."
+        },
+        {
+          "path": "frontend/src/components/support/WhatsAppButton.tsx",
+          "operation": "create",
+          "description": "Create WhatsApp link/button that opens wa.me using configured number and optional message; reuse in Support page and footer. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Footer.tsx",
+          "operation": "modify",
+          "description": "Add WhatsApp button/link in the footer using the shared WhatsAppButton component."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminSupportInboxPage.tsx",
+          "operation": "modify",
+          "description": "Add UI states for listing and viewing contact submissions, to be populated when backend capability is available."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Implement baseline SEO and performance: per-page titles/meta where applicable, accessible headings, optimized images, and sensible loading states.",
+      "acceptanceCriteria": [
+        "Each major page sets a meaningful document title (and meta description where implemented).",
+        "Images use appropriate formats/sizes and lazy loading for non-critical media.",
+        "All pages have loading/empty states for data fetching; no blocking spinner-only screens for extended periods."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/usePageMeta.ts",
+          "operation": "create",
+          "description": "Create a small hook to set document.title and (optionally) meta description from within each page component using useEffect."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Set meaningful page title/meta via usePageMeta and ensure hero/promo images use appropriate sizing and lazy loading where sensible."
+        },
+        {
+          "path": "frontend/src/pages/CategoryListingPage.tsx",
+          "operation": "modify",
+          "description": "Set meaningful page title/meta based on selected category and ensure accessible headings and loading/empty states."
+        },
+        {
+          "path": "frontend/src/pages/ProductDetailPage.tsx",
+          "operation": "modify",
+          "description": "Set meaningful page title/meta based on product and ensure media is not render-blocking and includes loading/empty states for queries."
+        },
+        {
+          "path": "frontend/src/pages/CartPage.tsx",
+          "operation": "modify",
+          "description": "Set page title/meta and ensure empty/loading states are present."
+        },
+        {
+          "path": "frontend/src/pages/CheckoutPage.tsx",
+          "operation": "modify",
+          "description": "Set page title/meta and ensure checkout has clear, non-blocking loading and error states."
+        },
+        {
+          "path": "frontend/src/pages/WishlistPage.tsx",
+          "operation": "modify",
+          "description": "Set page title/meta and ensure empty/loading states are present."
+        },
+        {
+          "path": "frontend/src/pages/OrdersPage.tsx",
+          "operation": "modify",
+          "description": "Set page title/meta and ensure empty/loading states are present."
+        },
+        {
+          "path": "frontend/src/pages/SupportPage.tsx",
+          "operation": "modify",
+          "description": "Set page title/meta and ensure accessible form labels and success state are present."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Add generated static images under frontend/public/assets/generated and render them in the UI (no backend serving).",
+      "acceptanceCriteria": [
+        "Generated images are placed under frontend/public/assets/generated and referenced directly by the frontend.",
+        "Home page hero/banner section uses the generated banner images.",
+        "Category tiles use the generated category images/icons."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/logo.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/hero-banner.dim_1920x700.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/hero-banner.dim_1920x700.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/promo-banner.dim_1920x500.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/promo-banner.dim_1920x500.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/cat-clothing.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/cat-clothing.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/cat-beauty.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/cat-beauty.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/cat-wellness.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/cat-wellness.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/cat-fragrance.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/cat-fragrance.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/cat-jewellery.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/cat-jewellery.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/cat-lifestyle.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated static image asset: frontend/public/assets/generated/cat-lifestyle.dim_512x512.png."
+        },
+        {
+          "path": "frontend/src/components/branding/BrandMark.tsx",
+          "operation": "create",
+          "description": "Create a small brand component to render the generated logo asset in header/footer. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Reference frontend/public/assets/generated/hero-banner.dim_1920x700.png and frontend/public/assets/generated/promo-banner.dim_1920x500.png in hero/promo sections with responsive sizing and lazy loading where sensible."
+        },
+        {
+          "path": "frontend/src/components/catalog/FeaturedCategories.tsx",
+          "operation": "create",
+          "description": "Create featured categories grid component that maps the 6 categories to the generated tile images (cat-*.dim_512x512.png) and links to category listing routes. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Use FeaturedCategories to render category tiles with generated images: frontend/public/assets/generated/cat-clothing.dim_512x512.png, cat-beauty.dim_512x512.png, cat-wellness.dim_512x512.png, cat-fragrance.dim_512x512.png, cat-jewellery.dim_512x512.png, cat-lifestyle.dim_512x512.png."
+        }
+      ]
+    }
+  ]
+}
