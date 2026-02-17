@@ -1,164 +1,38 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T15:14:55.006Z",
-  "summary": "The diff adds a large amount of new frontend routing/layout/auth UI and a new Motoko backend with some auth/ACL scaffolding, categories, cart, variants, and Stripe checkout session plumbing. However, based on the visible diff excerpts (and acknowledging truncation/omitted files), multiple BuildRequest requirements either lack clear implementation evidence (notably wishlist, orders/tracking, admin CRUD/role assignment, contact form storage/admin inbox, idempotent seeding, and the specified six top-level categories/products model completeness). Some implemented elements also diverge from the requested category set and add unrequested mechanisms (admin secret token initialization, caffeine.ai referral link).",
+  "generatedAt": "2026-02-17T16:15:39.251Z",
+  "summary": "Backend `getCategories()` and multiple frontend category surfaces were updated to show only Clothes, Jewellery, and Fragrances; category name mappings and Home page metadata/copy were adjusted accordingly. However, the diff evidence is insufficient to confirm that no other backend APIs or seeded/default data still reference the removed categories, and it does not fully demonstrate behavior for direct navigation to removed category IDs beyond a generic name fallback.",
   "missing_requirements": [
     {
-      "id": "REQ-3",
-      "requirement": "Define the backend data model and APIs for Categories (with subcategories), Products (with images, price, description, inventory, size/color variants), Reviews, Carts, Wishlists, Orders, Order items, Users (Internet Identity principals), and Admin role/permissions, with admin-only protection.",
-      "reason": "The visible backend excerpt shows only partial models/APIs (e.g., Category has only parentCategory, Product lacks images, and no Order/Wishlist APIs are evidenced). Because backend/main.mo is truncated, additional APIs may exist, but they are not verifiable from the provided diff summary.",
+      "id": "REQ-20",
+      "requirement": "No backend API returns or depends on the removed categories (Beauty, Health & Wellness) as seeded/default categories.",
+      "reason": "The diff shows `getCategories()` returning only 3 categories, but `backend/main.mo` is truncated and does not provide enough evidence that other backend APIs and any seeded/default category usage were also fully removed.",
       "evidence": [
-        "backend/main.mo (truncated excerpt shows Category/Product/Variant/Cart pieces; no wishlist/orders shown)"
+        "backend/main.mo (truncated)"
       ]
     },
     {
-      "id": "REQ-5",
-      "requirement": "Implement category-wise product listing pages with subcategory navigation and basic client-side filters/sorting and pagination/incremental loading.",
-      "reason": "Routing exists for category pages, but no evidence is shown for filters/sorting and pagination/incremental loading behavior in the provided excerpts.",
+      "id": "REQ-23",
+      "requirement": "If a user manually visits a removed/unknown category ID route, the page does not present Beauty/Wellness as a valid category name and shows an empty/appropriate state.",
+      "reason": "CategoryListingPage uses a generic fallback name for unknown IDs and shows an empty-state when `products.length === 0`, but the diff does not show that `useGetProductsByCategory` (backend/query layer) returns an appropriate empty result for removed/unknown IDs, nor does it explicitly demonstrate handling for the specific removed IDs beyond the label fallback.",
       "evidence": [
-        "frontend/src/App.tsx (routes only)",
-        "frontend/src/hooks/useQueries.ts (product/category queries only; no filters/pagination shown in excerpt)"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "requirement": "Cart persistence per authenticated user with a guest fallback stored locally until login.",
-      "reason": "Backend cart storage is keyed by Principal (authenticated), and the frontend queries caller cart items; there is no evidence of a guest-cart local-storage fallback in the shown diffs.",
-      "evidence": [
-        "backend/main.mo (carts: Map<Principal, Cart>)",
-        "frontend/src/hooks/useQueries.ts (useGetCallerCartItems etc.; no guest storage shown)"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "requirement": "Checkout flow with shipping/contact form, order summary, payment method selection where Stripe is the only real online payment and UPI/net banking/COD are offline/manual options that create a payment-pending/manual-verification order state.",
-      "reason": "There is evidence of Stripe checkout session creation and success/failure routes, but no evidence is shown for shipping/contact form fields, offline/manual payment options (UPI/net banking/COD), or backend order creation/state changes for either Stripe success or manual payment selection.",
-      "evidence": [
-        "frontend/src/hooks/useStripeCheckout.ts (Stripe session only)",
-        "frontend/src/App.tsx (CheckoutPage route; PaymentSuccess/Failure routes)"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "requirement": "Status-based order tracking (Placed→Packed→Shipped→Delivered/Cancelled) visible to customers and manageable by admins.",
-      "reason": "Orders pages/routes exist, but the provided backend excerpt does not show order types, storage, status transitions, or admin update endpoints; no UI evidence of status tracking is shown in the provided excerpts.",
-      "evidence": [
-        "frontend/src/App.tsx (OrdersPage/AdminOrdersPage routes)",
-        "backend/main.mo (truncated; no order model/APIs visible)"
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "requirement": "Wishlist feature persisted per authenticated user with toggle on product cards and product detail pages.",
-      "reason": "Wishlist route exists and a heart icon is shown on ProductCard, but there is no evidence that the heart button is wired to backend wishlist APIs or that wishlist persistence exists in backend state.",
-      "evidence": [
-        "frontend/src/App.tsx (WishlistPage route)",
-        "frontend/src/components/catalog/ProductCard.tsx (Heart button has no action shown)",
-        "backend/main.mo (truncated; no wishlist storage/APIs visible)"
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "requirement": "Admin panel + backend endpoints to manage categories/products/orders/manual payment marking/users/admin role assignment with enforcement.",
-      "reason": "Admin routes and an AdminRouteGuard exist, but the provided backend excerpt does not show category/product CRUD, order management, manual payment verification, or admin role grant/revoke APIs. Truncation prevents full verification.",
-      "evidence": [
-        "frontend/src/App.tsx (Admin* routes)",
-        "frontend/src/components/auth/AdminRouteGuard.tsx",
-        "backend/main.mo (truncated; no admin CRUD endpoints visible)"
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "requirement": "Support contact form stored/submitted to backend for admin review + WhatsApp link/button with configurable phone number; admin can view submissions in admin panel.",
-      "reason": "WhatsApp button/config is present, but no evidence is shown for a support contact form UI, backend storage/submission API, or admin inbox backed by canister state.",
-      "evidence": [
-        "frontend/src/components/support/WhatsAppButton.tsx",
-        "frontend/src/config/support.ts",
-        "frontend/src/App.tsx (SupportPage/AdminSupportInboxPage routes only)"
-      ]
-    },
-    {
-      "id": "REQ-15",
-      "requirement": "Seed initial data for the six specified top-level categories and example products across categories; idempotent or explicit admin-only action.",
-      "reason": "The backend getCategories() returns a hardcoded set of categories that do not match the required six (Clothing, Beauty & Skincare, Health & Wellness, Perfumes & Fragrances, Jewellery & Accessories, Lifestyle Products), and there is no evidence shown of idempotent seeding for products distributed across those categories.",
-      "evidence": [
-        "backend/main.mo (getCategories hardcodes Men's/Women's Fashion, Electronics, Home & Kitchen, Beauty & Personal Care, Sports & Outdoors)"
+        "frontend/src/pages/CategoryListingPage.tsx",
+        "frontend/src/hooks/useQueries.ts (only referenced in summaries; not shown)"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Backend hardcodes categories that differ from the specified six top-level categories (e.g., Men's Fashion, Electronics, Home & Kitchen, Sports & Outdoors).",
-      "reason": "BuildRequest explicitly requires six specific categories for the premium storefront tiles and seeding; the backend excerpt shows a different set.",
-      "evidence": [
-        "backend/main.mo (getCategories hardcoded list)"
-      ]
-    },
-    {
-      "description": "Admin access control initialization via a secret URL parameter 'caffeineAdminToken' and actor method '_initializeAccessControlWithSecret'.",
-      "reason": "BuildRequest requires Internet Identity-based auth and admin role checks, but does not request a separate secret-token bootstrap mechanism via URL parameters.",
-      "evidence": [
-        "frontend/src/hooks/useActor.ts (getSecretParameter('caffeineAdminToken'); actor._initializeAccessControlWithSecret(adminToken))"
-      ]
-    },
-    {
-      "description": "Footer includes a caffeine.ai referral link with utm parameters based on hostname.",
-      "reason": "Not requested in the BuildRequest requirements/non-goals; appears as additional branding/attribution behavior.",
-      "evidence": [
-        "frontend/src/components/layout/Footer.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.62,
+  "hallucinated_features": [],
+  "confidence": 0.63,
   "changed_files": [
-    "all_files_summary.json",
     "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.css",
-    "frontend/index.html",
-    "frontend/src/App.tsx",
-    "frontend/src/components/auth/AdminRouteGuard.tsx",
-    "frontend/src/components/auth/LoginButton.tsx",
-    "frontend/src/components/auth/ProfileSetupDialog.tsx",
-    "frontend/src/components/branding/BrandMark.tsx",
     "frontend/src/components/catalog/FeaturedCategories.tsx",
     "frontend/src/components/catalog/ProductCard.tsx",
     "frontend/src/components/layout/Footer.tsx",
     "frontend/src/components/layout/HeaderNav.tsx",
-    "frontend/src/components/layout/SiteLayout.tsx",
-    "frontend/src/components/product/ReviewSection.tsx",
-    "frontend/src/components/product/VariantSelector.tsx",
-    "frontend/src/components/support/WhatsAppButton.tsx",
-    "frontend/src/config/support.ts",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
-    "frontend/src/hooks/usePageMeta.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/hooks/useStripeCheckout.ts",
-    "frontend/src/index.css",
-    "frontend/src/main.tsx",
-    "frontend/src/pages/AccountPage.tsx",
-    "frontend/src/pages/CartPage.tsx",
     "frontend/src/pages/CategoryListingPage.tsx",
-    "frontend/src/pages/CheckoutPage.tsx",
     "frontend/src/pages/HomePage.tsx",
-    "frontend/src/pages/OrdersPage.tsx",
-    "frontend/src/pages/PaymentFailurePage.tsx",
-    "frontend/src/pages/PaymentSuccessPage.tsx",
-    "frontend/src/pages/ProductDetailPage.tsx",
-    "frontend/src/pages/SupportPage.tsx",
-    "frontend/src/pages/WishlistPage.tsx",
-    "frontend/src/pages/admin/AdminCategoriesPage.tsx",
-    "frontend/src/pages/admin/AdminDashboardPage.tsx",
-    "frontend/src/pages/admin/AdminLayout.tsx",
-    "frontend/src/pages/admin/AdminOrdersPage.tsx",
-    "frontend/src/pages/admin/AdminProductsPage.tsx",
-    "frontend/src/pages/admin/AdminSupportInboxPage.tsx",
-    "frontend/src/pages/admin/AdminUsersPage.tsx",
-    "frontend/src/pages/admin/StripeSetupPanel.tsx",
-    "frontend/src/utils/urlParams.ts",
-    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }

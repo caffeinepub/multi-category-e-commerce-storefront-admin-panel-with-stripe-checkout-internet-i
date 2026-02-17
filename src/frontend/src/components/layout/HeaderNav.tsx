@@ -9,12 +9,9 @@ import BrandMark from '../branding/BrandMark';
 import { useInternetIdentity } from '../../hooks/useInternetIdentity';
 
 const categories = [
-  { id: '1', name: 'Clothing' },
-  { id: '2', name: 'Beauty' },
-  { id: '3', name: 'Wellness' },
-  { id: '4', name: 'Fragrances' },
-  { id: '5', name: 'Jewellery' },
-  { id: '6', name: 'Lifestyle' }
+  { id: '1', name: 'Clothes' },
+  { id: '2', name: 'Jewellery' },
+  { id: '3', name: 'Fragrances' }
 ];
 
 export default function HeaderNav() {

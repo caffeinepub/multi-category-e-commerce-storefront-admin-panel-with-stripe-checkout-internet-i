@@ -1,12 +1,14 @@
 export default function BrandMark() {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       <img
-        src="/assets/generated/logo.dim_512x512.png"
-        alt="Premium Marketplace"
-        className="h-8 w-8 object-contain"
+        src="/assets/Green and Cream Elegant Saree Fashion Logo.png"
+        alt="Mixora Softcare"
+        className="h-10 w-auto object-contain"
       />
-      <span className="font-display text-xl font-semibold">Premium</span>
+      <span className="font-display text-2xl font-semibold tracking-tight text-foreground">
+        Mixora
+      </span>
     </div>
   );
 }

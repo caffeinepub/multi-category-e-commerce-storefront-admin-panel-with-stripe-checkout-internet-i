@@ -5,17 +5,14 @@ import ProductCard from '../components/catalog/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const categoryNames: Record<string, string> = {
-  '1': 'Clothing',
-  '2': 'Beauty & Skincare',
-  '3': 'Health & Wellness',
-  '4': 'Perfumes & Fragrances',
-  '5': 'Jewellery & Accessories',
-  '6': 'Lifestyle Products'
+  '1': 'Clothes',
+  '2': 'Jewellery',
+  '3': 'Fragrances'
 };
 
 export default function CategoryListingPage() {
   const { categoryId } = useParams({ from: '/category/$categoryId' });
-  const categoryName = categoryNames[categoryId] || 'Products';
+  const categoryName = categoryNames[categoryId] || 'Category';
   
   usePageMeta(categoryName, `Browse our ${categoryName.toLowerCase()} collection`);
   

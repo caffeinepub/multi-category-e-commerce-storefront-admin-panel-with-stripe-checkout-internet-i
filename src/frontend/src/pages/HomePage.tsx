@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from '@tanstack/react-router';
 
 export default function HomePage() {
-  usePageMeta('Home', 'Shop premium clothing, beauty, wellness, fragrances, jewellery, and lifestyle products');
+  usePageMeta('Home', 'Shop premium clothes, jewellery, and fragrances');
   const navigate = useNavigate();
 
   return (
@@ -22,7 +22,7 @@ export default function HomePage() {
               Discover Premium Quality
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-xl">
-              Explore our curated collection of fashion, beauty, wellness, and lifestyle products
+              Explore our curated collection of clothes, jewellery, and fragrances
             </p>
             <Button size="lg" onClick={() => navigate({ to: '/category/$categoryId', params: { categoryId: '1' } })}>
               Shop Now

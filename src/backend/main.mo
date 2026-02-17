@@ -7,11 +7,7 @@ import Map "mo:core/Map";
 import Array "mo:core/Array";
 import Time "mo:core/Time";
 import List "mo:core/List";
-import Nat8 "mo:core/Nat8";
 import Nat "mo:core/Nat";
-import Int "mo:core/Int";
-import Nat32 "mo:core/Nat32";
-import Char "mo:core/Char";
 import Stripe "stripe/stripe";
 import OutCall "http-outcalls/outcall";
 import MixinAuthorization "authorization/MixinAuthorization";
@@ -72,7 +68,7 @@ actor {
     quantity : Nat;
   };
 
-  // No need for full cart details here, just product variations
+  // Only variations by color and size differentiated in current implementation
   public type Variant = {
     color : ?Text;
     size : ?Text;
@@ -115,21 +111,15 @@ actor {
   let carts = Map.empty<Principal, Cart>();
 
   public query ({ caller }) func getCategories() : async [Category] {
-    // Public endpoint - no authorization needed
-    let categories : [Category] = [
-      { id = "1"; name = "Men's Fashion"; parentCategory = null },
-      { id = "2"; name = "Women's Fashion"; parentCategory = null },
-      { id = "3"; name = "Electronics"; parentCategory = null },
-      { id = "4"; name = "Home & Kitchen"; parentCategory = null },
-      { id = "5"; name = "Beauty & Personal Care"; parentCategory = null },
-      { id = "6"; name = "Sports & Outdoors"; parentCategory = null },
+    [
+      { id = "1"; name = "Clothes"; parentCategory = null },
+      { id = "2"; name = "Jewellery"; parentCategory = null },
+      { id = "3"; name = "Fragrances"; parentCategory = null },
     ];
-    categories;
   };
 
   // Add/Update/Delete Cart Items
 
-  // Add Item to Cart
   public shared ({ caller }) func addItemToCart(variantId : Text, quantity : Nat) : async Bool {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only authenticated users can add items to cart");
@@ -167,7 +157,6 @@ actor {
     };
   };
 
-  // Update Item in Cart
   public shared ({ caller }) func updateCartItem(variantId : Text, quantity : Nat) : async Bool {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only authenticated users can update cart items");
@@ -180,7 +169,7 @@ actor {
         let updatedItems = itemsArray.map(
           func(item) {
             if (item.variantId == variantId) {
-              { variantId = item.variantId; quantity };
+              { variantId; quantity };
             } else { item };
           },
         );
@@ -190,7 +179,6 @@ actor {
     };
   };
 
-  // Remove Item from Cart
   public shared ({ caller }) func removeItemFromCart(variantId : Text) : async Bool {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only authenticated users can remove cart items");
@@ -212,7 +200,6 @@ actor {
   let variants = Map.empty<Text, ProductVar>();
 
   public query ({ caller }) func getProductsByCategory(categoryId : Text) : async [Product] {
-    // Public endpoint - no authorization needed
     let productsArray = products.values().toArray();
     productsArray.filter<Product>(func(product) { product.category == categoryId });
   };
@@ -272,7 +259,6 @@ actor {
   };
 
   public query ({ caller }) func getProductReviews(productId : Text) : async [Review] {
-    // Public endpoint - no authorization needed
     switch (reviews.get(productId)) {
       case (null) { [] };
       case (?reviewList) {
@@ -286,7 +272,6 @@ actor {
   var configuration : ?Stripe.StripeConfiguration = null;
 
   public query func isStripeConfigured() : async Bool {
-    // Public endpoint - no authorization needed
     configuration != null;
   };
 
@@ -305,11 +290,8 @@ actor {
   };
 
   public func getStripeSessionStatus(sessionId : Text) : async Stripe.StripeSessionStatus {
-    // Public endpoint for checking session status - no authorization needed
     await Stripe.getSessionStatus(getStripeConfiguration(), sessionId, transform);
   };
-
-  // Checkout helper functions
 
   public shared ({ caller }) func completeCheckoutSuccess(variantId : Text) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
@@ -330,7 +312,6 @@ actor {
   };
 
   public query ({ caller }) func transform(input : OutCall.TransformationInput) : async OutCall.TransformationOutput {
-    // Transform function for HTTP outcalls - no authorization needed
     OutCall.transform(input);
   };
 
@@ -344,7 +325,6 @@ actor {
   // Product Listing
 
   public query ({ caller }) func getAllProducts() : async [Product] {
-    // Public endpoint - no authorization needed
     products.values().toArray();
   };
 
@@ -373,7 +353,6 @@ actor {
   };
 
   public query ({ caller }) func getVariantsByProduct(productId : Text) : async [ProductVar] {
-    // Public endpoint - no authorization needed
     let variantsArray = variants.values().toArray();
     let filteredVariants = variantsArray.filter(func(variant) { variant.productId == productId });
     filteredVariants.sort();

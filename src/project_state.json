@@ -1,16 +1,17 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
-  "summary": "Build a modern, scalable multi-category e-commerce website (fashion, beauty, wellness, fragrances, jewellery, lifestyle) with storefront + admin panel, mobile-friendly/SEO/performance, using Stripe for online payments (with simulated offline UPI/net banking/COD options), Internet Identity authentication, and simple status-based order tracking.",
+  "projectStateVersion": 9,
+  "summary": "Build a modern, scalable e-commerce website with storefront + admin panel, mobile-friendly/SEO/performance, using Stripe for online payments (with simulated offline UPI/net banking/COD options), Internet Identity authentication, and simple status-based order tracking. Top-level categories are limited to Clothes, Jewellery, and Fragrances (Beauty and Health & Wellness removed site-wide).",
   "architectural_notes": [
     "Payments: implement Stripe for online payments; support UPI/net banking/COD as simulated/manual payment methods managed by admin.",
     "Authentication: use Internet Identity for both customer and admin login.",
     "Order tracking: simple internal status-based tracking; no external courier API integration.",
-    "Non-functional requirements: mobile-first responsive UI, fast loading, SEO optimized, secure payments, scalable architecture."
+    "Non-functional requirements: mobile-first responsive UI, fast loading, SEO optimized, secure payments, scalable architecture.",
+    "Branding: header should display the uploaded logo plus a styled “Mixora” wordmark aligned with the site’s premium typography.",
+    "Catalog scope: remove Beauty and Health & Wellness categories site-wide (storefront routes/nav, admin category management, and any seeded data); keep only Clothes, Jewellery, and Fragrances as top-level categories."
   ],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Premium e-commerce wordmark logo, minimal, monochrome on transparent background (logo.dim_512x512.png)\n- Wide hero banner with premium fashion/beauty/wellness collage, neutral palette, no text (hero-banner.dim_1920x700.png)\n- Secondary promotional banner with abstract premium gradients in warm neutrals, no text (promo-banner.dim_1920x500.png)\n- Six category tile illustrations/icons in a consistent premium style: Clothing, Beauty & Skincare, Health & Wellness, Perfumes & Fragrances, Jewellery & Accessories, Lifestyle Products (cat-clothing.dim_512x512.png; cat-beauty.dim_512x512.png; cat-wellness.dim_512x512.png; cat-fragrance.dim_512x512.png; cat-jewellery.dim_512x512.png; cat-lifestyle.dim_512x512.png)",
   "existing_features": [
     {
       "id": "feature-create-the-storefront-information-architecture-and-routing-for-a-multi-category-e-commerce-site-with-home-category-listing-product-detail-cart-checkout-wishlist-orders-order-tracking-account-login-and-support-pages",
@@ -123,6 +124,54 @@
         "REQ-16"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-the-uploaded-logo-file-green-and-cream-elegant-saree-fashion-logo-png-as-a-static-frontend-asset-and-render-it-as-the-storefront-header-brand-mark",
+      "title": "Add the uploaded logo file \"Green and Cream Elegant Saree Fashion Logo.png\" as a static frontend asset and render it as the storefront header brand mark.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-existing-brandmark-component-to-use-the-uploaded-logo-instead-of-the-current-generated-placeholder-logo-and-ensure-the-header-layout-remains-visually-balanced-on-mobile-and-desktop",
+      "title": "Update the existing BrandMark component to use the uploaded logo instead of the current generated placeholder logo and ensure the header layout remains visually balanced on mobile and desktop.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-brand-name-text-mixora-as-a-styled-wordmark-alongside-the-existing-logo-in-the-main-site-header-ensuring-the-combined-brand-lockup-remains-visually-balanced-on-mobile-and-desktop",
+      "title": "Add the brand name text “Mixora” as a styled wordmark alongside the existing logo in the main site header, ensuring the combined brand lockup remains visually balanced on mobile and desktop.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-beauty-and-health-wellness-from-all-storefront-navigation-and-category-surfaces-keeping-only-clothes-jewellery-and-fragrances-visible-to-users-header-navigation-mobile-menu-footer-links-and-featured-categories-grid",
+      "title": "Remove Beauty and Health & Wellness from all storefront navigation and category surfaces, keeping only Clothes, Jewellery, and Fragrances visible to users (header navigation, mobile menu, footer links, and featured categories grid).",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-category-related-page-metadata-and-labels-so-that-category-names-descriptions-do-not-mention-beauty-or-health-wellness-anywhere-in-customer-facing-ui-text-including-home-page-meta-description-hero-copy-and-category-listing-page-labels",
+      "title": "Update category-related page metadata and labels so that category names/descriptions do not mention Beauty or Health & Wellness anywhere in customer-facing UI text (including Home page meta description/hero copy and Category listing page labels).",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-removed-categories-are-not-accessible-through-normal-ui-flows-and-that-direct-navigation-to-removed-category-ids-does-not-present-them-as-valid-categories",
+      "title": "Ensure removed categories are not accessible through normal UI flows and that direct navigation to removed category IDs does not present them as valid categories.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -199,6 +248,38 @@
       "summary": "Seed the application with initial data for the six top-level categories and a small set of example products across categories to demonstrate end-to-end browsing, cart, and checkout.",
       "reqIds": [
         "REQ-15"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Add the provided/uploaded logo asset to the storefront site header (branding in navigation bar)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Populate/seed product catalog content based on product names from an external website (requires URL or list of product names)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Branding: add site header brand name text “Mixora” styled as a wordmark (matching theme typography) alongside the existing logo",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Catalog scope change: remove Health & Wellness and Beauty categories completely across the site (storefront + admin), leaving only Clothes, Jewellery, and Fragrances",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Update the backend categories returned by `getCategories()` to remove Health & Wellness and Beauty categories completely, and ensure only the three top-level categories remain available site-wide: Clothes, Jewellery, and Fragrances.",
+      "reqIds": [
+        "REQ-20"
       ],
       "status": "pending"
     }

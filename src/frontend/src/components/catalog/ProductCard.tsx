@@ -9,8 +9,15 @@ interface ProductCardProps {
   product: Product;
 }
 
+const categoryLabels: Record<string, string> = {
+  '1': 'Clothes',
+  '2': 'Jewellery',
+  '3': 'Fragrances'
+};
+
 export default function ProductCard({ product }: ProductCardProps) {
   const price = Number(product.price) / 100;
+  const categoryLabel = categoryLabels[product.category] || 'Product';
 
   return (
     <Card className="overflow-hidden hover:shadow-soft transition-shadow group">
@@ -42,7 +49,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center justify-between">
             <span className="font-semibold">${price.toFixed(2)}</span>
             <Badge variant="secondary" className="text-xs">
-              {product.category}
+              {categoryLabel}
             </Badge>
           </div>
         </div>
